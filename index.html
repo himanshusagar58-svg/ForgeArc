@@ -212,14 +212,14 @@
     .services { padding: 7rem 0; }
     .solution-layout { display: grid; grid-template-columns: .82fr 1.18fr; align-items: stretch; gap: 1rem; }
     .solution-feature, .solution-card { border: 1px solid var(--line); border-radius: var(--radius-lg); background: linear-gradient(145deg, rgba(14,19,26,.98), rgba(5,7,10,.94)); }
-    .solution-feature { position: relative; min-height: 450px; overflow: hidden; padding: 2rem; }
+    .solution-feature { position: relative; min-height: 450px; overflow: hidden; padding: 2rem; display: flex; flex-direction: column; }
     .solution-feature::before { content: ""; position: absolute; right: -195px; bottom: -170px; width: 390px; height: 390px; border: 1px solid rgba(88,161,255,.22); border-radius: 50%; box-shadow: 0 0 80px rgba(24,119,255,.14); }
     .solution-feature::after { content: ""; position: absolute; right: -125px; bottom: -100px; width: 250px; height: 250px; border: 1px solid rgba(214,221,231,.16); border-radius: 50%; }
     .featured-tag { position: relative; z-index: 1; display: inline-flex; border: 1px solid rgba(88,161,255,.26); border-radius: 999px; background: var(--blue-soft); padding: .42rem .64rem; color: var(--blue-bright); font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
     .solution-feature h3 { position: relative; z-index: 1; max-width: 450px; margin: 1rem 0 .85rem; font-size: clamp(1.85rem, 3.2vw, 3rem); line-height: .98; letter-spacing: -.066em; }
     .solution-feature > p { position: relative; z-index: 1; max-width: 400px; margin: 0; color: var(--muted); line-height: 1.7; }
     .link-arrow { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.42rem; color: var(--blue-bright); font-size: .80rem; font-weight: 850; }
-    .mini-flow { position: absolute; z-index: 1; bottom: 1.35rem; left: 1.35rem; right: 1.35rem; display: grid; grid-template-columns: repeat(3,1fr); gap: .55rem; }
+    .mini-flow { position: relative; z-index: 1; margin-top: auto; padding-top: 2.5rem; display: grid; grid-template-columns: repeat(3,1fr); gap: .55rem; }
     .mini-flow div { min-height: 82px; padding: .72rem; border: 1px solid rgba(215,223,233,.1); border-radius: 12px; background: rgba(4,7,10,.58); }
     .mini-flow b { display: block; color: var(--blue-bright); font-size: 1.1rem; }
     .mini-flow span { display: block; margin-top: .25rem; color: var(--muted); font-size: .63rem; line-height: 1.32; }
@@ -338,7 +338,7 @@
       .hero-grid, .linked-grid, .crm-shell, .process-grid, .cta-inner { grid-template-columns: 1fr; }
       .product-preview { min-height: 450px; max-width: 600px; width: 100%; margin: 0 auto; }
       .solution-layout { grid-template-columns: 1fr; }
-      .solution-feature { min-height: 395px; }
+      .solution-feature { min-height: 0; }
       .extension-grid { grid-template-columns: 1fr 1fr; }
       .cta-form { max-width: 540px; }
       .focus-label { max-width: 230px; }
@@ -365,7 +365,7 @@
       .services, .linked-section, .extensions, .crm-section { padding-bottom: 5rem; }
       .services { padding-top: 5rem; }
       .solution-grid, .extension-grid { grid-template-columns: 1fr; }
-      .solution-feature { min-height: 405px; }
+      .solution-feature { min-height: 0; }
       .linked-panel, .crm-shell, .cta-shell { border-radius: 22px; }
       .process { padding: 5rem 0; }
       .step { grid-template-columns: 42px 1fr; gap: .8rem; }
@@ -590,11 +590,11 @@
             </div>
             <form class="cta-form" id="contactForm" novalidate>
               <label for="name">Name / business</label>
-              <input id="name" name="name" type="text" autocomplete="name" minlength="4" placeholder="e.g. GoldMax gym, Bareilly" aria-describedby="nameError" required />
+              <input id="name" name="name" type="text" autocomplete="name" minlength="4" placeholder="e.g. Coffea Cafe, Bareilly" aria-describedby="nameError" required />
               <p class="field-error" id="nameError" role="alert"></p>
 
               <label for="phone">Phone number</label>
-              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="18" placeholder="e.g. 95290 64381" aria-describedby="phoneError" required />
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="18" placeholder="e.g. 95206 64381" aria-describedby="phoneError" required />
               <p class="field-error" id="phoneError" role="alert"></p>
 
               <label for="service">Service you are considering</label>
