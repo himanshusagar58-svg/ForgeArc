@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ForgeArc builds focused digital systems for cafés, restaurants, cloud kitchens and food businesses." />
+  <title>ForgeArc — Hospitality systems built around service</title>
+  <style>
+    :root {
+      --bg: #030405;
+      --bg-deep: #000102;
+      --panel: #090c11;
+      --panel-2: #0d1219;
+      --panel-3: #111824;
+      --line: rgba(196, 211, 230, .13);
+      --line-strong: rgba(196, 211, 230, .26);
+      --text: #f4f7fb;
+      --silver: #d6dde7;
+      --muted: #9aa6b8;
+      --dim: #687587;
+      --blue: #1877ff;
+      --blue-bright: #58a1ff;
+      --blue-soft: rgba(24, 119, 255, .14);
+      --blue-glow: rgba(24, 119, 255, .28);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --container: 1180px;
+      --shadow: 0 26px 90px rgba(0, 0, 0, .48);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 86% 12%, rgba(24,119,255,.10), transparent 22rem),
+        radial-gradient(circle at 10% 72%, rgba(60,83,114,.10), transparent 25rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .25;
+      background-image:
+        linear-gradient(rgba(182, 204, 231, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(182, 204, 231, .028) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, #000, transparent 74%);
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .container { width: min(var(--container), calc(100% - 40px)); margin: 0 auto; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin-bottom: .95rem;
+      color: var(--blue-bright);
+      font-size: .70rem;
+      font-weight: 850;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+    .section-heading { max-width: 720px; margin-bottom: 3rem; }
+    .section-heading h2, .section-title {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(2rem, 4.4vw, 4.25rem);
+      line-height: .97;
+      letter-spacing: -.072em;
+    }
+    .section-heading p, .section-copy {
+      margin: 1.2rem 0 0;
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+    .metal-text {
+      background: linear-gradient(120deg, #fff 5%, #a9b3c0 30%, #f5f8fc 57%, #8995a4 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      transition: background .24s ease, border-color .24s ease, backdrop-filter .24s ease;
+      border-bottom: 1px solid transparent;
+    }
+    .site-header.scrolled { background: rgba(3,4,5,.76); border-color: var(--line); backdrop-filter: blur(18px); }
+    .nav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; }
+    .brand { display: inline-flex; align-items: center; gap: .7rem; flex-shrink: 0; }
+    .brand-mark { width: 45px; height: 45px; display: block; overflow: hidden; border-radius: 12px; }
+    .brand-mark img { width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: screen; }
+    .brand-text { display: grid; gap: 2px; }
+    .brand-name { font-size: 1.15rem; line-height: 1; font-weight: 900; letter-spacing: -.055em; }
+    .brand-sub { color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 1.55rem; }
+    .nav-links a { color: var(--muted); font-size: .84rem; font-weight: 750; transition: color .2s ease; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta, .button-primary, .button-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 850;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .nav-cta { padding: .74rem 1rem; color: #f9fbff !important; background: linear-gradient(135deg, #1268e9, #2f8fff); box-shadow: 0 10px 30px rgba(24,119,255,.18); }
+    .nav-cta:hover, .button-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(24,119,255,.26); }
+    .mobile-trigger { display: none; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 11px; color: var(--text); background: var(--panel); }
+    .nav-call {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .42rem;
+      padding: .67rem .88rem;
+      border: 1px solid rgba(88,161,255,.45);
+      border-radius: 999px;
+      color: var(--blue-bright) !important;
+      background: rgba(24,119,255,.09);
+      white-space: nowrap;
+    }
+    .nav-call:hover { border-color: var(--blue-bright); background: rgba(24,119,255,.16); }
+    .call-icon { display: inline-flex; }
+
+    /* Hero */
+    .hero { position: relative; min-height: calc(100svh - 78px); display: grid; align-items: center; padding: 5.25rem 0 4.25rem; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 3.2rem; }
+    .hero-copy h1 { max-width: 780px; margin: 0; font-size: clamp(3.2rem, 7.6vw, 6.95rem); line-height: .875; letter-spacing: -.092em; }
+    .hero-copy h1 span { color: var(--blue-bright); }
+    .hero-copy > p { max-width: 590px; margin: 1.55rem 0 0; color: var(--muted); font-size: 1.02rem; line-height: 1.78; }
+    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+    .button-primary, .button-secondary { min-height: 49px; padding: 0 1.18rem; border: 1px solid transparent; }
+    .button-primary { color: #fbfdff; background: linear-gradient(135deg, #1069ed, #3493ff); box-shadow: 0 10px 28px rgba(24,119,255,.18); }
+    .button-secondary { color: var(--silver); border-color: var(--line-strong); background: rgba(255,255,255,.018); }
+    .button-secondary:hover { transform: translateY(-2px); border-color: rgba(88,161,255,.58); }
+    .hero-note { display: flex; align-items: center; gap: .55rem; margin-top: 1.35rem; color: var(--dim); font-size: .80rem; }
+    .hero-note svg { color: var(--blue-bright); }
+
+    .product-preview { position: relative; min-height: 525px; display: grid; place-items: center; }
+    .blue-arc { position: absolute; width: min(490px, 100%); aspect-ratio: 1; border: 1px solid rgba(88,161,255,.20); border-radius: 50%; }
+    .blue-arc::before, .blue-arc::after { content: ""; position: absolute; border-radius: inherit; }
+    .blue-arc::before { inset: 8%; border: 1px solid rgba(214,221,231,.14); }
+    .blue-arc::after { inset: 22%; border: 1px solid rgba(24,119,255,.26); box-shadow: 0 0 44px rgba(24,119,255,.08); }
+    .hero-emblem { position: absolute; width: 135px; height: 135px; z-index: 0; opacity: .34; filter: drop-shadow(0 0 26px rgba(24,119,255,.32)); }
+    .hero-emblem img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; }
+    .dashboard { position: relative; z-index: 1; width: min(100%, 458px); overflow: hidden; border: 1px solid rgba(215,223,233,.22); border-radius: 22px; background: linear-gradient(145deg, rgba(18,23,31,.97), rgba(5,7,10,.98)); box-shadow: var(--shadow); transform: rotate(2.15deg); }
+    .dash-top { display: flex; justify-content: space-between; align-items: center; padding: .86rem 1rem; border-bottom: 1px solid var(--line); }
+    .mini-brand { display: inline-flex; align-items: center; gap: .46rem; color: var(--silver); font-size: .7rem; font-weight: 850; }
+    .mini-brand i { width: 8px; height: 8px; border-radius: 50%; display: block; background: var(--blue-bright); box-shadow: 0 0 14px var(--blue); }
+    .demo-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .35rem .56rem; border: 1px solid rgba(88,161,255,.26); background: var(--blue-soft); border-radius: 999px; color: var(--blue-bright); font-size: .61rem; font-weight: 850; }
+    .demo-pill b { width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 9px currentColor; }
+    .dash-content { padding: 1rem; }
+    .dash-title-row { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+    .dash-title-row h3 { margin: 0; font-size: 1.08rem; letter-spacing: -.045em; }
+    .dash-title-row span { color: var(--dim); font-size: .67rem; }
+    .quick-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .52rem; margin: 1rem 0; }
+    .quick-stat { padding: .72rem; border: 1px solid rgba(220,229,241,.06); border-radius: 12px; background: rgba(255,255,255,.028); }
+    .quick-stat small { display: block; color: var(--dim); font-size: .57rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .quick-stat strong { display: block; margin-top: .2rem; color: var(--silver); font-size: .88rem; }
+    .quick-stat strong.accent { color: var(--blue-bright); }
+    .order-stack { display: grid; gap: .48rem; }
+    .order-line { display: grid; grid-template-columns: 35px 1fr auto; align-items: center; gap: .65rem; padding: .67rem; border: 1px solid rgba(220,229,241,.05); border-radius: 12px; background: rgba(255,255,255,.022); }
+    .order-avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; color: var(--blue-bright); background: rgba(24,119,255,.14); font-size: .75rem; font-weight: 900; }
+    .order-line:nth-child(2) .order-avatar { color: #d8dee7; background: rgba(214,221,231,.12); }
+    .order-line:nth-child(3) .order-avatar { color: #88b9ff; background: rgba(88,161,255,.12); }
+    .order-line strong, .order-line span { display: block; }
+    .order-line strong { font-size: .71rem; }
+    .order-line span { margin-top: .15rem; color: var(--dim); font-size: .61rem; }
+    .order-line em { color: var(--blue-bright); font-size: .64rem; font-style: normal; font-weight: 850; }
+    .float-card { position: absolute; z-index: 2; padding: .74rem .84rem; border: 1px solid rgba(215,223,233,.15); border-radius: 13px; background: rgba(10,14,19,.83); box-shadow: 0 18px 42px rgba(0,0,0,.34); backdrop-filter: blur(13px); }
+    .float-card small { display: block; color: var(--dim); font-size: .58rem; letter-spacing: .09em; text-transform: uppercase; }
+    .float-card strong { display: block; margin-top: .22rem; color: var(--silver); font-size: .84rem; }
+    .float-card.one { top: 7%; right: -2%; }
+    .float-card.two { bottom: 8%; left: -4%; }
+    .float-card.two strong { color: var(--blue-bright); }
+
+    .focus-bar { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.012); padding: 1.2rem 0; }
+    .focus-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.3rem; }
+    .focus-label { max-width: 205px; color: var(--dim); font-size: .72rem; line-height: 1.45; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .industry-tags { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .52rem; }
+    .industry-tags span { padding: .49rem .74rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: rgba(255,255,255,.018); font-size: .75rem; font-weight: 750; }
+
+    /* Services */
+    .services { padding: 7rem 0; }
+    .solution-layout { display: grid; grid-template-columns: .82fr 1.18fr; align-items: stretch; gap: 1rem; }
+    .solution-feature, .solution-card { border: 1px solid var(--line); border-radius: var(--radius-lg); background: linear-gradient(145deg, rgba(14,19,26,.98), rgba(5,7,10,.94)); }
+    .solution-feature { position: relative; min-height: 450px; overflow: hidden; padding: 2rem; display: flex; flex-direction: column; }
+    .solution-feature::before { content: ""; position: absolute; right: -195px; bottom: -170px; width: 390px; height: 390px; border: 1px solid rgba(88,161,255,.22); border-radius: 50%; box-shadow: 0 0 80px rgba(24,119,255,.14); }
+    .solution-feature::after { content: ""; position: absolute; right: -125px; bottom: -100px; width: 250px; height: 250px; border: 1px solid rgba(214,221,231,.16); border-radius: 50%; }
+    .featured-tag { position: relative; z-index: 1; display: inline-flex; border: 1px solid rgba(88,161,255,.26); border-radius: 999px; background: var(--blue-soft); padding: .42rem .64rem; color: var(--blue-bright); font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .solution-feature h3 { position: relative; z-index: 1; max-width: 450px; margin: 1rem 0 .85rem; font-size: clamp(1.85rem, 3.2vw, 3rem); line-height: .98; letter-spacing: -.066em; }
+    .solution-feature > p { position: relative; z-index: 1; max-width: 400px; margin: 0; color: var(--muted); line-height: 1.7; }
+    .link-arrow { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.42rem; color: var(--blue-bright); font-size: .80rem; font-weight: 850; }
+    .mini-flow { position: relative; z-index: 1; margin-top: auto; padding-top: 2.5rem; display: grid; grid-template-columns: repeat(3,1fr); gap: .55rem; }
+    .mini-flow div { min-height: 82px; padding: .72rem; border: 1px solid rgba(215,223,233,.1); border-radius: 12px; background: rgba(4,7,10,.58); }
+    .mini-flow b { display: block; color: var(--blue-bright); font-size: 1.1rem; }
+    .mini-flow span { display: block; margin-top: .25rem; color: var(--muted); font-size: .63rem; line-height: 1.32; }
+    .solution-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+    .solution-card { min-height: 218px; padding: 1.3rem; display: flex; flex-direction: column; transition: transform .22s ease, border-color .22s ease, background .22s ease; }
+    .solution-card:hover { transform: translateY(-5px); border-color: rgba(88,161,255,.38); background: linear-gradient(145deg, rgba(20,30,45,.98), rgba(6,10,14,.98)); }
+    .product-status { display: inline-flex; align-items: center; width: max-content; margin: 0 0 .95rem auto; padding: .32rem .52rem; border: 1px solid rgba(196,211,230,.22); border-radius: 999px; color: var(--muted); background: rgba(255,255,255,.035); font-size: .60rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+    .product-status.available { border-color: rgba(88,161,255,.35); color: var(--blue-bright); background: var(--blue-soft); }
+    .solution-card.is-coming-soon, .extension-card.is-coming-soon { background: linear-gradient(145deg, rgba(13,17,23,.90), rgba(5,7,10,.92)); }
+    .solution-card.is-coming-soon:hover, .extension-card.is-coming-soon:hover { border-color: rgba(196,211,230,.24); transform: translateY(-3px); }
+    .system-node.coming-soon { border-style: dashed; border-color: rgba(196,211,230,.22); background: rgba(255,255,255,.018); }
+    .solution-icon { width: 42px; height: 42px; display: grid; place-items: center; margin-bottom: auto; border: 1px solid rgba(88,161,255,.2); border-radius: 12px; color: var(--blue-bright); background: var(--blue-soft); }
+    .solution-card h3 { margin: 1.1rem 0 .43rem; color: var(--silver); font-size: 1rem; letter-spacing: -.035em; }
+    .solution-card p { margin: 0; color: var(--muted); font-size: .81rem; line-height: 1.62; }
+
+    /* Connected flow */
+    .linked-section { padding: 0 0 7rem; }
+    .linked-panel { position: relative; overflow: hidden; padding: clamp(1.55rem, 5vw, 4rem); border: 1px solid var(--line); border-radius: var(--radius-xl); background: linear-gradient(127deg, #0e1520 0%, #05070a 58%, #0a121d 100%); }
+    .linked-panel::before { content: ""; position: absolute; top: -290px; right: -170px; width: 570px; height: 570px; border: 1px solid rgba(88,161,255,.22); border-radius: 50%; box-shadow: 0 0 95px rgba(24,119,255,.16); }
+    .linked-panel::after { content: ""; position: absolute; bottom: -160px; left: 25%; width: 340px; height: 340px; border: 1px solid rgba(214,221,231,.12); border-radius: 50%; }
+    .linked-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: 3rem; }
+    .linked-copy h2 { max-width: 560px; margin: 0; font-size: clamp(2rem, 4.2vw, 4rem); line-height: .95; letter-spacing: -.072em; }
+    .linked-copy p { max-width: 530px; margin: 1.25rem 0 0; color: var(--muted); line-height: 1.75; }
+    .check-list { display: grid; gap: .65rem; margin-top: 1.55rem; }
+    .check-list div { display: flex; align-items: flex-start; gap: .63rem; color: #d6dde8; font-size: .87rem; }
+    .check-list svg { flex: 0 0 auto; margin-top: .08rem; color: var(--blue-bright); }
+    .system-visual { display: grid; gap: .7rem; }
+    .system-line { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .8rem; }
+    .system-node { padding: 1rem; border: 1px solid rgba(214,221,231,.13); border-radius: 16px; background: rgba(5,8,12,.62); }
+    .system-node strong { display: block; color: var(--silver); font-size: .85rem; }
+    .system-node span { display: block; margin-top: .26rem; color: var(--dim); font-size: .67rem; line-height: 1.45; }
+    .system-connector { position: relative; width: 38px; height: 1px; background: linear-gradient(90deg, rgba(88,161,255,.16), var(--blue-bright), rgba(88,161,255,.16)); }
+    .system-connector::after { content: ""; position: absolute; top: 50%; right: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-bright); transform: translateY(-50%); box-shadow: 0 0 12px var(--blue); }
+    .system-center { width: 100%; padding: 1.15rem; border: 1px solid rgba(88,161,255,.28); border-radius: 16px; text-align: center; background: linear-gradient(120deg, rgba(24,119,255,.18), rgba(24,119,255,.04)); }
+    .system-center small { display: block; color: var(--blue-bright); font-size: .62rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .system-center strong { display: block; margin-top: .3rem; color: var(--silver); font-size: .98rem; }
+
+    /* Extensions */
+    .extensions { padding: 0 0 7rem; }
+    .extension-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .extension-card { min-height: 248px; padding: 1.55rem; border: 1px solid var(--line); border-radius: var(--radius-lg); background: rgba(255,255,255,.018); transition: transform .2s ease, border-color .2s ease; }
+    .extension-card:hover { transform: translateY(-4px); border-color: rgba(88,161,255,.35); }
+    .extension-card .solution-icon { margin-bottom: 1.25rem; }
+    .extension-card h3 { margin: 0; color: var(--silver); font-size: 1.28rem; letter-spacing: -.045em; }
+    .extension-card p { max-width: 500px; margin: .65rem 0 0; color: var(--muted); font-size: .87rem; line-height: 1.7; }
+    .micro-label { display: inline-flex; margin-top: 1.15rem; color: var(--blue-bright); font-size: .66rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+
+
+    /* Process and contact */
+    .process { padding: 6.5rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.012); }
+    .process-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3rem; align-items: start; }
+    .process-grid h2 { margin: 0; font-size: clamp(2.15rem, 4.5vw, 4rem); line-height: .96; letter-spacing: -.073em; }
+    .process-grid p { max-width: 390px; margin: 1.18rem 0 0; color: var(--muted); line-height: 1.72; }
+    .steps { display: grid; gap: .8rem; }
+    .step { display: grid; grid-template-columns: 60px 1fr auto; gap: 1rem; align-items: start; padding: 1.18rem 0; border-bottom: 1px solid var(--line); }
+    .step:first-child { padding-top: .12rem; }
+    .step-number { color: var(--blue-bright); font-size: 1rem; font-weight: 900; }
+    .step h3 { margin: 0; color: var(--silver); font-size: 1rem; letter-spacing: -.035em; }
+    .step p { max-width: 520px; margin: .38rem 0 0; font-size: .82rem; }
+    .step-tag { padding: .38rem .54rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .61rem; font-weight: 850; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+
+    .cta { padding: 6.5rem 0; }
+    .cta-shell { position: relative; overflow: hidden; padding: clamp(1.6rem, 5.5vw, 4rem); border: 1px solid rgba(120,177,255,.42); border-radius: var(--radius-xl); background: linear-gradient(130deg, #1167df, #1e85ff 52%, #0e58c5); box-shadow: 0 28px 90px rgba(5,55,138,.26); }
+    .cta-shell::before { content: ""; position: absolute; top: -220px; right: -100px; width: 440px; height: 440px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
+    .cta-shell::after { content: ""; position: absolute; left: 35%; bottom: -220px; width: 330px; height: 330px; border: 1px solid rgba(255,255,255,.20); border-radius: 50%; }
+    .cta-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr minmax(300px, 370px); align-items: start; gap: 2.2rem; }
+    .cta-shell h2 { max-width: 650px; margin: .45rem 0 0; font-size: clamp(2.3rem, 5.3vw, 5rem); line-height: .9; letter-spacing: -.085em; }
+    .cta-shell p { max-width: 535px; margin: 1rem 0 0; color: rgba(255,255,255,.81); line-height: 1.68; font-size: .92rem; }
+    .cta-form { display: grid; gap: .58rem; padding: .9rem; border: 1px solid rgba(255,255,255,.25); border-radius: 18px; background: rgba(3,8,19,.24); backdrop-filter: blur(12px); }
+    .cta-form label { margin-top: .12rem; color: rgba(255,255,255,.88); font-size: .67rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .cta-form input, .cta-form select, .cta-form textarea { width: 100%; outline: none; border: 1px solid rgba(255,255,255,.25); border-radius: 11px; padding: .78rem .84rem; color: #f8fbff; background: rgba(2,8,18,.33); font-size: .83rem; transition: background .18s ease, border-color .18s ease; }
+    .cta-form select { appearance: auto; }
+    .cta-form input::placeholder, .cta-form textarea::placeholder { color: rgba(244,248,255,.60); }
+    .cta-form input:focus, .cta-form select:focus, .cta-form textarea:focus { border-color: rgba(255,255,255,.78); background: rgba(2,8,18,.5); }
+    .cta-form textarea { min-height: 86px; resize: vertical; }
+    .form-button { min-height: 47px; margin-top: .15rem; border: none; border-radius: 11px; color: #0a2b64; background: #f7fbff; font-size: .84rem; font-weight: 900; transition: transform .2s ease, background .2s ease; }
+    .form-button:hover { transform: translateY(-2px); background: #dfeeff; }
+    .form-status { min-height: 1em; margin: .1rem 0 0; color: rgba(255,255,255,.86); font-size: .71rem; line-height: 1.4; }
+    .field-error { display: none; margin: -.18rem 0 .08rem; color: #ffe2e2; font-size: .69rem; line-height: 1.35; }
+    .field-error.visible { display: block; }
+    .cta-form input.is-invalid, .cta-form select.is-invalid, .cta-form textarea.is-invalid { border-color: #ffd0d0; background: rgba(103,16,21,.26); }
+    .cta-form input.is-valid, .cta-form select.is-valid, .cta-form textarea.is-valid { border-color: rgba(222,241,255,.62); }
+    .consent-row { display: flex; align-items: flex-start; gap: .62rem; margin: .34rem 0 .02rem; color: rgba(255,255,255,.83); font-size: .72rem !important; font-weight: 650 !important; letter-spacing: 0 !important; line-height: 1.5; text-transform: none !important; cursor: pointer; }
+    .consent-row input[type="checkbox"] { width: 16px; height: 16px; min-width: 16px; margin: .11rem 0 0; padding: 0; border: 0; border-radius: 4px; accent-color: #f7fbff; background: transparent; box-shadow: none; }
+    .consent-row input[type="checkbox"].is-invalid { outline: 1px solid #ffd0d0; outline-offset: 2px; background: transparent; }
+    .consent-row input[type="checkbox"].is-valid { outline: 1px solid rgba(222,241,255,.62); outline-offset: 2px; background: transparent; }
+    .consent-row a { color: #fff; font-weight: 850; text-decoration: underline; text-underline-offset: 2px; }
+    .consent-row a:hover { color: #dfeeff; }
+    .privacy-note { margin: -.12rem 0 .08rem; color: rgba(255,255,255,.68); font-size: .66rem; line-height: 1.45; }
+    .cta-call { margin-top: .85rem; }
+    .cta-call .button-secondary { min-height: 45px; color: #fff; border-color: rgba(255,255,255,.45); background: rgba(3,8,19,.16); }
+    .cta-call .button-secondary:hover { border-color: #fff; background: rgba(3,8,19,.28); }
+
+    /* Footer */
+    footer { padding: 2.35rem 0; border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; }
+    .footer-copy { color: var(--dim); font-size: .75rem; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .footer-links a { color: var(--muted); font-size: .75rem; font-weight: 750; }
+    .footer-links a:hover { color: var(--blue-bright); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1080px) {
+      .nav-links { gap: .85rem; }
+      .nav-links a { font-size: .78rem; }
+      .nav-call { padding: .62rem .76rem; }
+    }
+
+    @media (max-width: 940px) {
+      .hero { padding-top: 4rem; }
+      .hero-grid, .linked-grid, .process-grid, .cta-inner { grid-template-columns: 1fr; }
+      .product-preview { min-height: 450px; max-width: 600px; width: 100%; margin: 0 auto; }
+      .solution-layout { grid-template-columns: 1fr; }
+      .solution-feature { min-height: 0; }
+      .extension-grid { grid-template-columns: 1fr 1fr; }
+      .cta-form { max-width: 540px; }
+      .focus-label { max-width: 230px; }
+    }
+    @media (max-width: 720px) {
+      .container { width: min(var(--container), calc(100% - 28px)); }
+      .nav { min-height: 70px; }
+      .brand-mark { width: 40px; height: 40px; }
+      .brand-name { font-size: 1.05rem; }
+      .mobile-trigger { display: grid; place-items: center; }
+      .nav-links { position: absolute; top: 100%; left: 14px; right: 14px; display: grid; gap: .28rem; padding: .7rem; border: 1px solid var(--line); border-radius: 16px; background: rgba(8,11,15,.96); box-shadow: var(--shadow); transform: translateY(-10px); opacity: 0; pointer-events: none; transition: transform .2s ease, opacity .2s ease; }
+      .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+      .nav-links a { padding: .75rem; border-radius: 9px; }
+      .nav-links a:not(.nav-cta):hover { background: rgba(255,255,255,.045); }
+      .nav-cta { margin-top: .25rem; }
+      .hero { min-height: auto; padding: 4.3rem 0 3.7rem; }
+      .hero-copy h1 { font-size: clamp(3rem, 14vw, 4.6rem); }
+      .product-preview { min-height: 395px; margin-top: .45rem; }
+      .dashboard { width: min(100%, 410px); transform: rotate(1.1deg); }
+      .float-card.one { right: -3px; top: 2%; }
+      .float-card.two { left: -1px; bottom: 1%; }
+      .focus-inner { align-items: flex-start; flex-direction: column; }
+      .industry-tags { justify-content: flex-start; }
+      .services, .linked-section, .extensions { padding-bottom: 5rem; }
+      .services { padding-top: 5rem; }
+      .solution-grid, .extension-grid { grid-template-columns: 1fr; }
+      .solution-feature { min-height: 0; }
+      .linked-panel, .cta-shell { border-radius: 22px; }
+      .process { padding: 5rem 0; }
+      .step { grid-template-columns: 42px 1fr; gap: .8rem; }
+      .step-tag { grid-column: 2; justify-self: start; }
+      .cta { padding: 5rem 0; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 390px) {
+      .quick-stats { gap: .36rem; }
+      .quick-stat { padding: .52rem; }
+      .quick-stat strong { font-size: .77rem; }
+      .order-line { grid-template-columns: 30px 1fr auto; gap: .46rem; }
+      .order-avatar { width: 29px; height: 29px; }
+      .system-line { gap: .42rem; }
+      .system-connector { width: 17px; }
+      .system-node { padding: .73rem; }
+      .system-node strong { font-size: .73rem; }
+      .system-node span { font-size: .58rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a href="#top" class="brand" aria-label="ForgeArc home">
+        <span class="brand-mark" aria-hidden="true"><img src="./assets/forgearc-logo.png" alt="" /></span>
+        <span class="brand-text"><span class="brand-name">ForgeArc</span><span class="brand-sub">Hospitality systems</span></span>
+      </a>
+      <button class="mobile-trigger" id="mobileTrigger" aria-expanded="false" aria-controls="navLinks" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#services">Solutions</a>
+        <a href="projects.html">Projects</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="tel:+919520664381" class="nav-call"><span class="call-icon" aria-hidden="true">☎</span> Call now</a>
+        <a href="#contact" class="nav-cta">Start a conversation <span aria-hidden="true">↗</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Built for hospitality operations</div>
+          <h1>Digital systems that keep <span>service moving.</span></h1>
+          <p>ForgeArc builds focused, mobile-first tools for cafés, restaurants, cloud kitchens and food brands—covering ordering, POS, menu pricing, repeat customers and local delivery. More direct orders. Lower per-order cost. Customers who actually return</p>
+          <div class="hero-actions">
+            <a class="button-primary" href="#contact">Talk about your setup <span aria-hidden="true">↗</span></a>
+            <a class="button-secondary" href="tel:+919520664381"><span aria-hidden="true">☎</span> Call ForgeArc</a>
+          </div>
+          <div class="hero-note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+            Designed around real service flow, not bloated software.
+          </div>
+        </div>
+
+        <div class="product-preview reveal" aria-label="Illustration of a ForgeArc hospitality workspace">
+          <div class="blue-arc"></div>
+          <div class="hero-emblem" aria-hidden="true"><img src="./assets/forgearc-logo.png" alt="" /></div>
+          <div class="float-card one"><small>Live service flow</small><strong>Counter · QR · Delivery</strong></div>
+          <div class="float-card two"><small>Single system</small><strong>Orders stay aligned</strong></div>
+          <div class="dashboard">
+            <div class="dash-top"><div class="mini-brand"><i></i> ForgeArc workspace</div><div class="demo-pill"><b></b> Demo view</div></div>
+            <div class="dash-content">
+              <div class="dash-title-row"><h3>Service overview</h3><span>Saturday · Dinner shift</span></div>
+              <div class="quick-stats">
+                <div class="quick-stat"><small>Order sources</small><strong>3 live</strong></div>
+                <div class="quick-stat"><small>Menu status</small><strong class="accent">Live</strong></div>
+                <div class="quick-stat"><small>Queue</small><strong>On track</strong></div>
+              </div>
+              <div class="order-stack">
+                <div class="order-line"><div class="order-avatar">12</div><div><strong>Table order</strong><span>2 cappuccinos · fries</span></div><em>In prep</em></div>
+                <div class="order-line"><div class="order-avatar">WA</div><div><strong>WhatsApp order</strong><span>Paneer wrap · cold coffee</span></div><em>New</em></div>
+                <div class="order-line"><div class="order-avatar">DL</div><div><strong>Local delivery</strong><span>Pizza · pasta · mojito</span></div><em>Ready</em></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="focus-bar" aria-label="Hospitality focus">
+      <div class="container focus-inner">
+        <div class="focus-label">Specialised for the places where every order and minute matters.</div>
+        <div class="industry-tags"><span>Cafés</span><span>Restaurants</span><span>Cloud Kitchens</span><span>QSRs</span><span>Food Brands</span></div>
+      </div>
+    </section>
+
+    <section class="services" id="services">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div class="eyebrow">Core hospitality tools</div>
+          <h2>Start with the part of service that needs to work <span class="metal-text">better now.</span></h2>
+        </div>
+
+        <div class="solution-layout">
+          <article class="solution-feature reveal">
+            <span class="featured-tag">Available now</span>
+            <h3>QR menu to WhatsApp order—without the confusing bits.</h3>
+            <p>Give customers a clear mobile menu, collect table or delivery details, and send a structured order directly to your WhatsApp for confirmation.</p>
+            <a href="#contact" class="link-arrow">Discuss QR ordering <span aria-hidden="true">↗</span></a>
+            <div class="mini-flow" aria-hidden="true"><div><b>01</b><span>Customer scans</span></div><div><b>02</b><span>Builds an order</span></div><div><b>03</b><span>Team receives it</span></div></div>
+          </article>
+
+          <div class="solution-grid">
+            <article class="solution-card reveal is-coming-soon">
+              <div class="solution-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6.5h16M6.5 3v7M17.5 3v7M5 10h14v10H5z"/><path d="M8 14h3M8 17h5"/></svg></div>
+              <span class="product-status">Coming soon</span>
+              <h3>Mini POS</h3><p>Order punching, simple tables, KOT-friendly tickets and an uncomplicated cashier view for smaller restaurant operations.</p>
+            </article>
+            <article class="solution-card reveal is-coming-soon">
+              <div class="solution-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 7V3m8 4V3M5 11h14M6 5h12a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/><path d="M8 15h3M8 18h6"/></svg></div>
+              <span class="product-status">Coming soon</span>
+              <h3>POS + QR menu, linked</h3><p>Bring dine-in QR orders and counter orders into one view, so the kitchen and billing desk stay aligned.</p>
+            </article>
+            <article class="solution-card reveal is-coming-soon">
+              <div class="solution-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h16M7 15l3-3 3 2 5-6"/><circle cx="18" cy="8" r="1"/></svg></div>
+              <span class="product-status">Coming soon</span>
+              <h3>Food cost &amp; pricing calculator</h3><p>Calculate recipe cost, packaging, platform fees, discounts, taxes and your target margin before setting the menu price.</p>
+            </article>
+            <article class="solution-card reveal is-coming-soon">
+              <div class="solution-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v10H3z"/><path d="M14 10h3l3 3v4h-6z"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/></svg></div>
+              <span class="product-status">Coming soon</span>
+              <h3>Direct ordering &amp; local delivery</h3><p>A branded ordering web app for direct customers, helping you take repeat orders without relying only on marketplace commissions.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="linked-section">
+      <div class="container">
+        <div class="linked-panel reveal">
+          <div class="linked-grid">
+            <div class="linked-copy">
+              <div class="eyebrow">Hospitality roadmap</div>
+              <h2>Start with QR ordering. Add connected tools when they are ready.</h2>
+              <p>ForgeArc begins with a clear QR-to-WhatsApp ordering flow. POS, pricing and direct-order tools are planned as the next parts of the hospitality stack.</p>
+              <div class="check-list">
+                <div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg> QR ordering is available for deployment today.</div>
+                <div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg> Future products will remain mobile-first and hospitality-specific.</div>
+                <div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg> Every next tool will be shaped around real counter, floor and kitchen flow.</div>
+              </div>
+            </div>
+            <div class="system-visual" aria-label="Diagram of connected hospitality tools">
+              <div class="system-line"><div class="system-node"><strong>QR Ordering</strong><span>Available now</span></div><div class="system-connector"></div><div class="system-node"><strong>WhatsApp</strong><span>Confirm and support</span></div></div>
+              <div class="system-center"><small>ForgeArc roadmap</small><strong>QR ordering today · More tools next</strong></div>
+              <div class="system-line"><div class="system-node coming-soon"><strong>Mini POS</strong><span>Coming soon</span></div><div class="system-connector"></div><div class="system-node coming-soon"><strong>Local delivery</strong><span>Coming soon</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="process" id="how-it-works">
+      <div class="container process-grid">
+        <div class="reveal">
+          <div class="eyebrow">How a ForgeArc build moves</div>
+          <h2>Clear scope.<br>Useful launch.</h2>
+          <p>We start with the operational bottleneck, not a giant feature list. The aim is a useful first system your team can run confidently.</p>
+        </div>
+        <div class="steps reveal">
+          <div class="step"><div class="step-number">01</div><div><h3>Map the current flow</h3><p>We identify where orders, calculations, bookings, follow-ups or staff handoffs are becoming slow, messy or inconsistent.</p></div><span class="step-tag">Discovery</span></div>
+          <div class="step"><div class="step-number">02</div><div><h3>Build the useful first version</h3><p>We prioritise the flow your staff and customers will actually use, with a mobile-first interface and straightforward operating logic.</p></div><span class="step-tag">Build</span></div>
+          <div class="step"><div class="step-number">03</div><div><h3>Refine after real service</h3><p>After the system is used in a real operation, we add only the next features that prove useful.</p></div><span class="step-tag">Improve</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="container">
+        <div class="cta-shell reveal">
+          <div class="cta-inner">
+            <div>
+              <div class="eyebrow" style="color:#f8fbff">Start with one bottleneck</div>
+              <h2>Let’s make service easier to run.</h2>
+              <p>Send your requirement directly on WhatsApp. Include the service you are considering and a short note about the current problem.</p>
+            </div>
+            <form class="cta-form" id="contactForm" novalidate>
+              <label for="name">Name / business</label>
+              <input id="name" name="name" type="text" autocomplete="name" minlength="4" placeholder="XYZ Cafe" aria-describedby="nameError" required />
+              <p class="field-error" id="nameError" role="alert"></p>
+
+              <label for="phone">Phone number</label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="18" placeholder="e.g. 95206 64381" aria-describedby="phoneError" required />
+              <p class="field-error" id="phoneError" role="alert"></p>
+
+              <label for="service">Service you are considering</label>
+              <select id="service" name="service" aria-describedby="serviceError" required>
+                <option value="" selected disabled>Select a service</option>
+                <option>QR Menu + WhatsApp Ordering</option>
+                <option>Mini POS (Coming soon)</option>
+                <option>POS + QR Menu (Linked) (Coming soon)</option>
+                <option>Food Cost &amp; Price Calculator (Coming soon)</option>
+                <option>Direct Ordering &amp; Local Delivery Web App (Coming soon)</option>
+                <option>Digital Loyalty Card (Coming soon)</option>
+                <option>Table Reservations (Coming soon)</option>
+                <option>Not sure yet / Need advice</option>
+              </select>
+              <p class="field-error" id="serviceError" role="alert"></p>
+
+              <label for="message">Comment / requirement</label>
+              <textarea id="message" name="message" minlength="10" placeholder="Tell us about your outlet, current process, or what you want the system to solve." aria-describedby="messageError" required></textarea>
+              <p class="field-error" id="messageError" role="alert"></p>
+
+              <label class="consent-row" for="privacyConsent">
+                <input id="privacyConsent" name="privacyConsent" type="checkbox" aria-describedby="privacyConsentError" required />
+                <span>I have read the <a href="privacy-policy.html">Privacy Policy</a> and agree to ForgeArc using these details to respond to this enquiry.</span>
+              </label>
+              <p class="field-error" id="privacyConsentError" role="alert"></p>
+              <p class="privacy-note">The form opens a WhatsApp conversation with ForgeArc; do not include sensitive payment, identity or account information.</p>
+
+              <button class="form-button" type="submit">Continue on WhatsApp <span aria-hidden="true">↗</span></button>
+              <div class="cta-call"><a class="button-secondary" href="tel:+919520664381"><span aria-hidden="true">☎</span> Call 95206 64381</a></div>
+              <p class="form-status" id="formStatus" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a href="#top" class="brand" aria-label="Back to top">
+        <span class="brand-mark" aria-hidden="true"><img src="./assets/forgearc-logo.png" alt="" /></span>
+        <span class="brand-text"><span class="brand-name">ForgeArc</span><span class="brand-sub">Hospitality systems</span></span>
+      </a>
+      <div class="footer-copy">© <span id="year"></span> ForgeArc. Focused hospitality systems.</div>
+      <div class="footer-links"><a href="#services">Solutions</a><a href="projects.html">Projects</a><a href="reviews.html">Reviews</a><a href="privacy-policy.html">Privacy Policy</a><a href="tel:+919520664381">Call</a><a href="#contact">Contact</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.querySelector('.site-header');
+    const navLinks = document.getElementById('navLinks');
+    const mobileTrigger = document.getElementById('mobileTrigger');
+
+    function updateHeader() { header.classList.toggle('scrolled', window.scrollY > 10); }
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+
+    mobileTrigger.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      mobileTrigger.setAttribute('aria-expanded', String(isOpen));
+      mobileTrigger.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+      mobileTrigger.innerHTML = isOpen
+        ? '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>'
+        : '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    });
+
+    navLinks.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      mobileTrigger.setAttribute('aria-expanded', 'false');
+      mobileTrigger.setAttribute('aria-label', 'Open navigation');
+      mobileTrigger.innerHTML = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    }));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    const fields = {
+      name: document.getElementById('name'),
+      phone: document.getElementById('phone'),
+      service: document.getElementById('service'),
+      message: document.getElementById('message'),
+      consent: document.getElementById('privacyConsent')
+    };
+
+    function setFieldState(field, message = '') {
+      const error = document.getElementById(`${field.id}Error`);
+      const isValid = !message;
+      const hasValue = field.type === 'checkbox' ? field.checked : field.value.trim().length > 0;
+      field.classList.toggle('is-invalid', !isValid);
+      field.classList.toggle('is-valid', isValid && hasValue);
+      field.setAttribute('aria-invalid', String(!isValid));
+      error.textContent = message;
+      error.classList.toggle('visible', !isValid);
+      return isValid;
+    }
+
+    function normaliseIndianPhone(value) {
+      let digits = value.replace(/\D/g, '');
+      if (digits.startsWith('91') && digits.length === 12) digits = digits.slice(2);
+      if (digits.startsWith('0') && digits.length === 11) digits = digits.slice(1);
+      return digits;
+    }
+
+    function validateName() {
+      const value = fields.name.value.trim();
+      return setFieldState(fields.name, value.length >= 4 ? '' : 'Enter at least 4 characters for your name or business.');
+    }
+
+    function validatePhone() {
+      const digits = normaliseIndianPhone(fields.phone.value);
+      const valid = /^[6-9]\d{9}$/.test(digits);
+      return setFieldState(fields.phone, valid ? '' : 'Enter a valid 10-digit Indian mobile number.');
+    }
+
+    function validateService() {
+      return setFieldState(fields.service, fields.service.value ? '' : 'Select the service you want to discuss.');
+    }
+
+    function validateMessage() {
+      const value = fields.message.value.trim();
+      return setFieldState(fields.message, value.length >= 10 ? '' : 'Add at least 10 characters about your requirement.');
+    }
+
+    function validateConsent() {
+      return setFieldState(fields.consent, fields.consent.checked ? '' : 'Please review and accept the Privacy Policy before continuing.');
+    }
+
+    const validators = { name: validateName, phone: validatePhone, service: validateService, message: validateMessage, consent: validateConsent };
+    Object.entries(fields).forEach(([key, field]) => {
+      const isChoice = key === 'service' || key === 'consent';
+      field.addEventListener(isChoice ? 'change' : 'blur', validators[key]);
+      if (!isChoice) {
+        field.addEventListener('input', () => {
+          if (field.classList.contains('is-invalid')) validators[key]();
+        });
+      }
+    });
+
+    contactForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const isValid = Object.values(validators).every((validate) => validate());
+
+      if (!isValid) {
+        formStatus.textContent = 'Check the highlighted fields before continuing to WhatsApp.';
+        const firstInvalid = contactForm.querySelector('.is-invalid');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      const name = fields.name.value.trim();
+      const phone = normaliseIndianPhone(fields.phone.value);
+      const service = fields.service.value;
+      const message = fields.message.value.trim();
+      const whatsappMessage = [
+        'Hello ForgeArc,',
+        '',
+        `Name / Business: ${name}`,
+        `Phone: ${phone}`,
+        `Service: ${service}`,
+        `Requirement: ${message}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/919520664381?text=${encodeURIComponent(whatsappMessage)}`;
+      formStatus.textContent = 'Opening WhatsApp with your enquiry…';
+      window.open(whatsappUrl, '_blank', 'noopener');
+    });
+  </script>
+</body>
+</html>
